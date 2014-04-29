@@ -5,6 +5,7 @@
  */
 
 package tarea.redes;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class TareaRedes extends Thread {
     static final String HTML_END = 
 			"</body>" +
 			"</html>";
+  
     
     public static void main(String[] args) throws Exception {
 //    int port = 8000;
@@ -44,6 +46,48 @@ public class TareaRedes extends Thread {
 
 //        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+        out.write("HTTP/1.1 200 OK\r\n");
+        out.write("Date: Mon, 23 May 2005 22:38:34 GMT\r\n");
+        out.write("Server: Apache/1.3.3.7 (Unix) (Red-Hat/Linux)\r\n");
+        out.write("Content-Type: text/html; charset=UTF-8\r\n");
+        out.write("Connection: close\r\n");
+        out.write("\r\n");
+        out.write("<h1 id=\"agre_c\" style=\"visibility:\"\"\">Agregar contacto</h1>");
+        out.write("<form method=\"POST\">");
+        out.write("<P>");
+        out.write("<b><label id=\"nom\" style=\"visibility:\"\" \">Nombre<input type=\"text\" id=\"User\" name=\"User\"/></label>");
+        out.write("</P>");
+        out.write("<P>");
+        out.write("<b><label id=\"dir\" style=\"visibility:\"\" \">Direccion IP<input type=\"text\" id=\"IP\" name=\"IP\"/></label>");
+        out.write("</P>");
+        out.write("<P>");
+        out.write("<b><label  id=\"puer\" style=\"visibility:\"\" \">Puerto<input type=\"text\" id=\"Puerto\" name=\"Port\"/></label>");
+        out.write("</P>");
+        out.write("<input type=\"submit\" value=\"Guardar Contacto\" id=\"agre\" style=\"visibility: \"/>");
+        out.write("</form>");
+        
+        out.write("<form method=\"GET\" name=\"las2\">");
+        out.write("<h1>Contactos</h1>");
+        out.write("<input type=\"submit\" value=\"Actualizar Contactos\" id=\"mostrar\" />");
+        out.write("<input type=\"text\" name=\"get_con\" value=\"asd\" style=\"visibility:hidden \">");
+        out.write("</form>");
+        
+        out.write("<select name=\"drop1\" id=\"select1\"> method=\"GET\"");
+        out.write("</select>");
+        out.write("<input type=\"button\" value=\"Detalle\" id=\"detalle\" onclick=\"abc()\"/>");
+        out.write("<P>");
+	out.write("<label  id=\"deta\" ></label>");
+        out.write("</P>");
+        out.write("<script language=\"javascript\">");  
+        out.write("function abc()"); 
+        out.write("{");
+        out.write("var TerminalType = document.getElementById(\"select1\").value;");
+        out.write("document.getElementById(\"deta\").innerHTML=TerminalType;");
+        //out.write("alert(TerminalType);");
+        //out.write("document.getElementById('deta').innerHTML = TerminalType;");
+        
+        out.write("}");
+        out.write("</script>");
         in = new DataInputStream(clientSocket.getInputStream());
         
         String inputRequest;
@@ -55,27 +99,29 @@ public class TareaRedes extends Thread {
         for (int j = 0; j < i; j++) {
             buff.append((char) buffer[j]);           
         }
-        System.out.println(buff.toString());
-        System.out.println("\n");
+//        System.out.println(buff.toString());
+//        System.out.println("\n");
         inputRequest=buff.toString();
         String[] line1 = inputRequest.split(" ");
+        /*out.write("<h1>"+inputRequest+"</h1>");
+        out.write("<h1>"+line1[0]+"</h1>");
+        out.write("<h1>"+line1[1]+"</h1>");*/
         String method = line1[0];
         if(method.equals("POST")){
             System.out.println("metodo: " + method);
             String[] tokens = inputRequest.split("\n");
-            
             for (i = 0; i < tokens.length; i++){
                 System.out.println(tokens[i]);
             }
             String users=tokens[i-1];
-            
-            BufferedWriter out = null;
+            BufferedWriter aux = null;
             try  
             {
                 FileWriter fstream = new FileWriter("clients.txt", true); //true tells to append data.
-                out = new BufferedWriter(fstream);
-                out.write(users);
-                out.newLine();
+                aux = new BufferedWriter(fstream);
+                aux.write(users);
+                aux.newLine();
+                //agregar window.location.href="http://localhost:8000"
             }
             catch (IOException e)
             {
@@ -83,31 +129,78 @@ public class TareaRedes extends Thread {
             }
             finally
             {
-                if(out != null) {
-                    out.close();
+                if(aux != null) {
+                    aux.close();
                 }
             }
+            
         }
-        out.write("HTTP/1.1 200 OK\r\n");
-        out.write("Date: Mon, 23 May 2005 22:38:34 GMT\r\n");
-        out.write("Server: Apache/1.3.3.7 (Unix) (Red-Hat/Linux)\r\n");
-        out.write("Content-Type: text/html; charset=UTF-8\r\n");
-        out.write("Connection: close\r\n");
-        out.write("\r\n");
-        out.write("<h1>Agregar contacto</h1>");
-        out.write("<form method=\"POST\">");
-        out.write("<P>");
-        out.write("<b><label>Nombre<input type=\"text\" id=\"User\" name=\"User\"/></label>");
-        out.write("</P>");
-        out.write("<P>");
-        out.write("<b><label>Direccion IP<input type=\"text\" id=\"IP\" name=\"IP\"/></label>");
-        out.write("</P>");
-        out.write("<P>");
-        out.write("<b><label>Puerto<input type=\"text\" id=\"Puerto\" name=\"Port\"/></label>");
-        out.write("</P>");
-        out.write("<input type=\"submit\"/>");
-        out.write("</form>");
+        else if(line1[1].equals("/?get_con=asd") && method.equals("GET")){
+            System.out.println("metodo: " + method);
+            String[] tokens = inputRequest.split("\n");
+            
+            for (i = 0; i < tokens.length; i++){
+                System.out.println(tokens[i]);
+            }
+            String users=tokens[i-1];
+            BufferedWriter aux = null;
+            try{
+                // Open the file that is the first 
+                // command line parameter
+                FileInputStream fstream = new FileInputStream("clients.txt");
+                // Get the object of DataInputStream
+                DataInputStream in = new DataInputStream(fstream);
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                String strLine;
+                //Read File Line By Line
+                while ((strLine = br.readLine()) != null)   
+                {
+                // Print the content on the console
+                    String[] line2 = strLine.split("&");
+                    int largo=line2[0].length();
+                    int largo2=line2[1].length();
+                    int largo3=line2[2].length();
+                    if(largo!=0)
+                    {
+                        String line3= line2[0].substring(5,largo);
+                        String line4= line2[1].substring(3,largo2);
+                        String line5= line2[2].substring(5,largo3);
+                        String ccc="USUARIO: "+line3+"    IP: "+ line4+"   PUERTO: "+line5;
+                        System.out.println (ccc);
+                        /*System.out.println (line3);
+                    System.out.println (line4);
+                    System.out.println (line5);*/
+                        //out.write("<h1>"+largo+"</h1>");
+                        out.write("<script language=\"javascript\">");
 
+
+
+                        out.write(
+    "            var mySel = select1; // Listbox Name\n" +
+    "            var myOption;\n" +
+    "\n" +
+    "            myOption = document.createElement(\"Option\");\n" +
+    "            myOption.text = \""+line3+"\"; //Textbox's value\n            "
+            + "myOption.value =  \""+ ccc+"\"; //Textbox's value\n" +
+    "            mySel.add(myOption);");
+
+                        out.write("</script>");
+                    }
+                }
+                //Close the input stream
+                in.close();
+  
+    }catch (Exception e){//Catch exception if any
+  System.err.println("Error: " + e.getMessage());
+  }
+            finally
+            {
+                if(aux != null) {
+                    aux.close();
+                }
+            }
+           
+        }
         System.err.println("Conexion con el cliente terminada");
         out.close();
         clientSocket.close();

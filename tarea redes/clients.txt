@@ -1,7 +1,2 @@
+User=gonzalo&IP=190.168.1.111&Port=900
 
-User=Tomas&IP=197.127.0.0&Port=8000
-User=ignacio&IP=192.127.0.0&Port=5000
-User=roberto&IP=192.126.255.0&Port=1234
-User=vuvuzela&IP=192.168.19.23&Port=6969
-User=123&IP=123&Port=123
-
