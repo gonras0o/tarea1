@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.util.Hashtable;
 
 public class ChatServer {
-private static int port = 1001; /* puerto que se esta escuchando */
+private static int port = 8000; /* puerto que se esta escuchando */
 
 public static void main (String[] args) throws IOException {
 
@@ -39,7 +39,8 @@ public static void main (String[] args) throws IOException {
             System.err.println(e);
             System.exit(1);
         }
-        /* start a new thread to handle this client */
+        /* Empieza un thread, de los multiples pa poder manejar el cliente 
+            Wohooo multithreas   */
         Thread t = new Thread(new ClientConn(client));
         t.start();
     }
@@ -50,20 +51,20 @@ class ChatServerProtocol {
 private String nick;
 private ClientConn conn;
 
-/* a hash table from user nicks to the corresponding connections */
+/* tabla hash de nick + conexiones respectivaz */
 private static Hashtable<String, ClientConn> nicks = 
     new Hashtable<String, ClientConn>();
 
-private static final String msg_OK = "OK";
-private static final String msg_NICK_IN_USE = "Nick ya en uso";
-private static final String msg_SPECIFY_NICK = "Ingrese su Nick";
-private static final String msg_INVALID = "COMANDO INVALIDO";
-private static final String msg_SEND_FAILED = "ERROR: Fallo el envio de el mensaje";
+private static final String OK = "OK";
+private static final String NickNoValido = "Nick ya en uso";
+private static final String IngreseNick = "Ingrese su Nick de manera correcta";
+private static final String INVALIDO = "COMANDO INVALIDO";
+private static final String Error = "ERROR: Fallo el envio de el mensaje";
 
 /**
- * Adds a nick to the hash table 
- * returns false if the nick is already in the table, true otherwise
- */
+ * Agregas el nick a la tabla (supongamos que es como un "inicio" de sesion 
+ * Falso = si ya estan usando el nick, True= el nick esta disponible
+ medio como chat clasico web xD */
 private static boolean add_nick(String nick, ClientConn c) {
     if (nicks.containsKey(nick)) {
         return false;
@@ -87,13 +88,15 @@ public boolean isAuthenticated() {
 }
 
 /**
- * Implements the authentication protocol.
- * This consists of checking that the message starts with the NICK command
- * and that the nick following it is not already in use.
- * returns: 
- *  msg_OK if authenticated
- *  msg_NICK_IN_USE if the specified nick is already in use
- *  msg_SPECIFY_NICK if the message does not start with the NICK command 
+ * implementa el protocolo de autentificacion:
+ * 
+ * Chequea que el mensaje este escroto correctamente y que el nick no este usado
+ * 
+ * 
+ * retorna: 
+ *  OK = esta todo bn
+ *  NikcNoValido = ya existe(o problemas)
+ *  IngreseNick no empieza con el commando NICK
  */
 private String authenticate(String msg) {
     if(msg.startsWith("NICK")) {
@@ -101,20 +104,20 @@ private String authenticate(String msg) {
         if(add_nick(tryNick, this.conn)) {
             log("Nick " + tryNick + " se conecto.");
             this.nick = tryNick;
-            return msg_OK;
+            return OK;
         } else {
-            return msg_NICK_IN_USE;
+            return NickNoValido;
         }
     } else {
-        return msg_SPECIFY_NICK;
+        return IngreseNick;
     }
 }
 
 /**
- * Send a message to another user.
- * @recepient contains the recepient's nick
- * @msg contains the message to send
- * return true if the nick is registered in the hash, false otherwise
+ * Manda Mensajes
+ * @recepient tiene el nick del recipiente
+ * @msg el mensaje
+ * True =  existe el nick
  */
 private boolean sendMsg(String recipient, String msg) {
     if (nicks.containsKey(recipient)) {
@@ -127,7 +130,7 @@ private boolean sendMsg(String recipient, String msg) {
 }
 
 /**
- * Process a message coming from the client
+ * Procesa el mensaje que viene de otra parte
  */
 public String process(String msg) {
     if (!isAuthenticated()) 
@@ -137,11 +140,11 @@ public String process(String msg) {
     String msg_type = msg_parts[0];
 
     if(msg_type.equals("Send")) {
-        if(msg_parts.length < 3) return msg_INVALID;
-        if(sendMsg(msg_parts[1], msg_parts[2])) return msg_OK;
-        else return msg_SEND_FAILED;
+        if(msg_parts.length < 3) return INVALIDO;
+        if(sendMsg(msg_parts[1], msg_parts[2])) return OK;
+        else return Error;
     } else {
-        return msg_INVALID;
+        return INVALIDO;
     }
  }
 }
@@ -154,10 +157,9 @@ private PrintWriter out = null;
 ClientConn(Socket client) {
     this.client = client;
     try {
-        /* obtain an input stream to this client ... */
         in = new BufferedReader(new InputStreamReader(
                     client.getInputStream()));
-        /* ... and an output stream to the same client */
+        /*Obtiene el inputstream ...  y su respectivo output */
         out = new PrintWriter(client.getOutputStream(), true);
     } catch (IOException e) {
         System.err.println(e);
