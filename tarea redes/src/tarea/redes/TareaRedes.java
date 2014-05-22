@@ -100,13 +100,9 @@ public class TareaRedes extends Thread {
         for (int j = 0; j < i; j++) {
             buff.append((char) buffer[j]);           
         }
-//        System.out.println(buff.toString());
-//        System.out.println("\n");
         inputRequest=buff.toString();
         String[] line1 = inputRequest.split(" ");
-        /*out.write("<h1>"+inputRequest+"</h1>");
-        out.write("<h1>"+line1[0]+"</h1>");
-        out.write("<h1>"+line1[1]+"</h1>");*/
+
         String method = line1[0];
         if(method.equals("POST")){
             System.out.println("metodo: " + method);
@@ -122,7 +118,6 @@ public class TareaRedes extends Thread {
                 aux = new BufferedWriter(fstream);
                 aux.write(users);
                 aux.newLine();
-                //agregar window.location.href="http://localhost:8000"
             }
             catch (IOException e)
             {

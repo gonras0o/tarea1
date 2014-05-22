@@ -108,10 +108,12 @@ private String authenticate(String msg) {
             log("Nick " + tryNick + " se conecto.");
             this.nick = tryNick;
             return OK;
-        } else {
+        } 
+        else {
             return NickNoValido;
         }
-    } else {
+        } 
+        else {
         return IngreseNick;
     }
 }
