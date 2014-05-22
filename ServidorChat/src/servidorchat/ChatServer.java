@@ -5,7 +5,10 @@
  */
 
 package servidorchat;
-
+/**
+ *
+ * @author Paracelso
+ */
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -171,12 +174,11 @@ public void run() {
     String msg, response;
     ChatServerProtocol protocol = new ChatServerProtocol(this);
     try {
-        /* loop reading lines from the client which are processed 
-         * according to our protocol and the resulting response is 
-         * sent back to the client */
         while ((msg = in.readLine()) != null) {
             response = protocol.process(msg);
             out.println("SERVER: " + response);
+             /* loop que lee la lineas del cliente y que se procesan a travez del protoloco
+            si esta todo ok se le envia respuesta al cleinte */
         }
     } catch (IOException e) {
         System.err.println(e);

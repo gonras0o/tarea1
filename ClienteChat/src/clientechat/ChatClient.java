@@ -10,7 +10,6 @@ package clientechat;
  *
  * @author Paracelso
  */
-/* ChatClient.java */
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -20,17 +19,17 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class ChatClient {
-private static int port = 1001; /* port to connect to */
-private static String host = "localhost"; /* host to connect to */
+private static int port = 8000; /* el puerto */
+private static String host = "localhost"; /* el evidente host */
 
 private static BufferedReader stdIn;
 
 private static String nick;
 
-/**
- * Read in a nickname from stdin and attempt to authenticate with the 
- * server by sending a NICK command to @out. If the response from @in
- * is not equal to "OK" go bacl and read a nickname again
+/*
+    Lee el nickname y trata de autenticar con el servidor, mandando un commando NICK
+    a travez de el buffered writer @out. 
+    si la respuesta del bufferedreader @in no es ok queda la embarrada
  */
 private static String getNick(BufferedReader in, 
                               PrintWriter out) throws IOException {
@@ -56,21 +55,20 @@ public static void main (String[] args) throws IOException {
 
     stdIn = new BufferedReader(new InputStreamReader(System.in));
 
-    /* obtain an output stream to the server... */
     PrintWriter out = new PrintWriter(server.getOutputStream(), true);
-    /* ... and an input stream */
+    /* Obtiene el output eh input reader */
     BufferedReader in = new BufferedReader(new InputStreamReader(
                 server.getInputStream()));
 
     nick = getNick(in, out);
 
-    /* create a thread to asyncronously read messages from the server */
+    /* thread que lee mensajes asicronicamente */
     ServerConn sc = new ServerConn(server);
     Thread t = new Thread(sc);
     t.start();
 
     String msg;
-    /* loop reading messages from stdin and sending them to the server */
+    /* loop leyendo mensajes de stdin y los manda al server */
     while ((msg = stdIn.readLine()) != null) {
         out.println(msg);
     }
@@ -81,7 +79,7 @@ class ServerConn implements Runnable {
 private BufferedReader in = null;
 
 public ServerConn(Socket server) throws IOException {
-    /* obtain an input stream from the server */
+    /* pal servidor */
     in = new BufferedReader(new InputStreamReader(
                 server.getInputStream()));
 }
@@ -89,8 +87,7 @@ public ServerConn(Socket server) throws IOException {
 public void run() {
     String msg;
     try {
-        /* loop reading messages from the server and show them 
-         * on stdout */
+        /* lee mensajes del servidor y los muestra en stdout */
         while ((msg = in.readLine()) != null) {
             System.out.println(msg);
         }
