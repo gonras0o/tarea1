@@ -24,16 +24,6 @@ public class TareaRedes extends Thread {
         private static DataInputStream in;
         private static BufferedWriter out;
         
-    static final String HTML_START = 
-			"<html>" +
-			"<title>HTTP POST Server in java</title>" +
-			"<body>";
-			
-    static final String HTML_END = 
-			"</body>" +
-			"</html>";
-  
-    
     public static void main(String[] args) throws Exception {
 //    int port = 8000;
     ServerSocket serverSocket = new ServerSocket(8000);
@@ -52,6 +42,17 @@ public class TareaRedes extends Thread {
         out.write("Content-Type: text/html; charset=UTF-8\r\n");
         out.write("Connection: close\r\n");
         out.write("\r\n");
+        out.write("<body>");
+        out.write("<div style=\"float:right\">");
+        out.write("<div>");
+            out.write("<textarea rows=\"30\" cols=\"100\" disabled=\"True\"></textarea>");
+        out.write("</div>");
+        out.write("<div>");
+            out.write("<input type=\"text\" id=\"mensaje\" name=\"mensaje\" style=\"width:700px;\"/>");
+            out.write("<input type=\"button\" value=\"Enviar\" id=\"Enviar\" onclick=\"\"/>");
+        out.write("</div>");
+        out.write("</div>");
+        
         out.write("<h1 id=\"agre_c\" style=\"visibility:\"\"\">Agregar contacto</h1>");
         out.write("<form method=\"POST\">");
         out.write("<P>");
@@ -83,8 +84,8 @@ public class TareaRedes extends Thread {
         out.write("{");
         out.write("var TerminalType = document.getElementById(\"select1\").value;");
         out.write("document.getElementById(\"deta\").innerHTML=TerminalType;");
-        //out.write("alert(TerminalType);");
-        //out.write("document.getElementById('deta').innerHTML = TerminalType;");
+         out.write("<body>");
+
         
         out.write("}");
         out.write("</script>");
