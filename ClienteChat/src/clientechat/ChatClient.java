@@ -56,7 +56,13 @@ public static void main (String[] args) throws IOException {
 //    int pert = 8080;
     try {
         server = new Socket(host, port);
-        clientSocket = serverSocket.accept();
+//        clientSocket = serverSocket.accept();
+            try{
+                if(Desktop.isDesktopSupported()){
+                      Desktop.getDesktop().browse(new URI("http://localhost:8080"));
+                }}
+                catch(Exception e){
+                }   
 //        clientSocket = new Socket(host,pert);
     } catch (UnknownHostException e) {
         System.err.println(e);
@@ -79,7 +85,7 @@ public static void main (String[] args) throws IOException {
     Thread t = new Thread(sc);
     t.start();
     
-    ServerHTTP sh = new ServerHTTP(clientSocket);
+    ServerHTTP sh = new ServerHTTP(clientSocket,serverSocket);
     Thread http = new Thread(sh);
     http.start();
     String msg;
@@ -120,11 +126,13 @@ public void run() {
 class ServerHTTP implements Runnable {
 private static BufferedWriter out=null;
 private static Socket ServerHttp=null;
+private static ServerSocket SocketHttp=null;
 private static DataInputStream in;
-    public ServerHTTP(Socket server) throws IOException {
+    public ServerHTTP(Socket server,ServerSocket serverSocket) throws IOException {
         /* pal servidor */
 //        o = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
         ServerHttp = server;
+        SocketHttp=serverSocket;
         
     }
     public void run() {
@@ -132,6 +140,7 @@ private static DataInputStream in;
         try {
             /* lee mensajes del servidor y los muestra en stdout */
             while (true) {
+                 ServerHttp = SocketHttp.accept();
                 out = new BufferedWriter(new OutputStreamWriter(ServerHttp.getOutputStream()));
                 out.write("HTTP/1.1 200 OK\r\n");
         out.write("Date: Mon, 23 May 2005 22:38:34 GMT\r\n");
