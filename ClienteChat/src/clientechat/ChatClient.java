@@ -89,13 +89,7 @@ public static void main (String[] args) throws IOException {
     Thread http = new Thread(sh);
     http.start();
     String msg;
-    
-//        try{
-//        if(Desktop.isDesktopSupported()){
-//              Desktop.getDesktop().browse(new URI("http://localhost:8080"));
-//        }}
-//        catch(Exception e){
-//        }   
+       
     /* loop leyendo mensajes de stdin y los manda al server */
     while ((msg = stdIn.readLine()) != null) {
         out.println(msg);
@@ -113,14 +107,21 @@ public ServerConn(Socket server) throws IOException {
 }
 public void run() {
     String msg;
+
     try {
+        FileWriter fstream = new FileWriter("mensajes.txt", true); //true tells to append data.
+        BufferedWriter aux = null;
         /* lee mensajes del servidor y los muestra en stdout */
         while ((msg = in.readLine()) != null) {
+            aux = new BufferedWriter(fstream);
+            aux.newLine();
+            aux.write(msg);               
             System.out.println(msg);
+            aux.flush();
         }
-    } catch (IOException e) {
-        System.err.println(e);
-    }
+    }catch (IOException e) {
+        System.err.println("Error: " + e.getMessage());
+    }            
   }
 }
 class ServerHTTP implements Runnable {
@@ -142,7 +143,7 @@ private static DataInputStream in;
             while (true) {
                  ServerHttp = SocketHttp.accept();
                 out = new BufferedWriter(new OutputStreamWriter(ServerHttp.getOutputStream()));
-                out.write("HTTP/1.1 200 OK\r\n");
+        out.write("HTTP/1.1 200 OK\r\n");
         out.write("Date: Mon, 23 May 2005 22:38:34 GMT\r\n");
         out.write("Server: Apache/1.3.3.7 (Unix) (Red-Hat/Linux)\r\n");
         out.write("Content-Type: text/html; charset=UTF-8\r\n");
@@ -305,8 +306,8 @@ private static DataInputStream in;
         }
         System.err.println("Conexion con el cliente terminada");
         out.close();
-        
-
+        ServerHttp.close();
+    
         } 
 //        clientSocket.close();
             }
