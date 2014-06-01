@@ -154,12 +154,15 @@ private static DataInputStream in;
         out.write("<div>");
             out.write("<textarea rows=\"30\" cols=\"100\" disabled=\"True\"></textarea>");
         out.write("</div>");
-        out.write("<div>");
-            out.write("<input type=\"text\" id=\"mensaje\" name=\"mensaje\" style=\"width:700px;\"/>");
-            out.write("<input type=\"button\" value=\"Enviar\" id=\"Enviar\" onclick=\"\"/>");
-        out.write("</div>");
-        out.write("</div>");
         
+        out.write("<form method=\"POST\" name=\"nnn\" action=\"http://localhost:8080\">");
+      
+        out.write("<input type=\"text\" id=\"mensaje\" name=\"mensaje\" style=\"width:700px;\"/>");
+        
+        out.write("<input type=\"submit\" value=\"Enviar\" id=\"Enviar\" style=\"visibility: \"/>");
+     
+        out.write("</form>");
+        out.write("</div>");
         out.write("<h1 id=\"agre_c\" style=\"visibility:\"\"\">Agregar contacto</h1>");
         out.write("<form method=\"POST\">");
         out.write("<P>");
@@ -186,16 +189,18 @@ private static DataInputStream in;
         out.write("<P>");
 	out.write("<label  id=\"deta\" ></label>");
         out.write("</P>");
+        out.write("<body>");
         out.write("<script language=\"javascript\">");  
         out.write("function abc()"); 
         out.write("{");
         out.write("var TerminalType = document.getElementById(\"select1\").value;");
         out.write("document.getElementById(\"deta\").innerHTML=TerminalType;");
-         out.write("<body>");
+     
 
         
         out.write("}");
         out.write("</script>");
+        
         in = new DataInputStream(ServerHttp.getInputStream());
         
         String inputRequest;
@@ -213,29 +218,56 @@ private static DataInputStream in;
         String method = line1[0];
         if(method.equals("POST")){
             System.out.println("metodo: " + method);
-            String[] tokens = inputRequest.split("\n");
-            for (i = 0; i < tokens.length; i++){
-                System.out.println(tokens[i]);
-            }
-            String users=tokens[i-1];
-            BufferedWriter aux = null;
-            try  
-            {
-                FileWriter fstream = new FileWriter("clients.txt", true); //true tells to append data.
-                aux = new BufferedWriter(fstream);
-                aux.write(users);
-                aux.newLine();
-            }
-            catch (IOException e)
-            {
-                System.err.println("Error: " + e.getMessage());
-            }
-            finally
-            {
-                if(aux != null) {
-                    aux.close();
+                String[] tokens = inputRequest.split("\n");
+                int flag=0;
+                for (i = 0; i < tokens.length; i++){
+                    System.out.println(tokens[i]);
+                    
                 }
-            }
+                String users=tokens[i-1];
+                String users2= users.substring(0,7);
+                if(users2.equals("mensaje"))
+                {
+                    BufferedWriter aux = null;
+                    try  
+                    {
+                        FileWriter fstream = new FileWriter("mensajes.txt", true); //true tells to append data.
+                        aux = new BufferedWriter(fstream);
+                        aux.write(users);
+                        aux.newLine();
+                    }
+                    catch (IOException e)
+                    {
+                        System.err.println("Error: " + e.getMessage());
+                    }
+                    finally
+                    {
+                        if(aux != null) {
+                            aux.close();
+                        }
+                    }
+                }
+                else
+                {
+                    BufferedWriter aux = null;
+                    try  
+                    {
+                        FileWriter fstream = new FileWriter("clients.txt", true); //true tells to append data.
+                        aux = new BufferedWriter(fstream);
+                        aux.write(users);
+                        aux.newLine();
+                    }
+                    catch (IOException e)
+                    {
+                        System.err.println("Error: " + e.getMessage());
+                    }
+                    finally
+                    {
+                        if(aux != null) {
+                            aux.close();
+                        }
+                    }
+                }
             
         }
         else if(line1[1].equals("/?get_con=asd") && method.equals("GET")){
@@ -252,8 +284,8 @@ private static DataInputStream in;
                 // command line parameter
                 FileInputStream fstream = new FileInputStream("clients.txt");
                 // Get the object of DataInputStream
-                DataInputStream in = new DataInputStream(fstream);
-                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                DataInputStream ina = new DataInputStream(fstream);
+                BufferedReader br = new BufferedReader(new InputStreamReader(ina));
                 String strLine;
                 //Read File Line By Line
                 while ((strLine = br.readLine()) != null)   
@@ -270,10 +302,6 @@ private static DataInputStream in;
                         String line5= line2[2].substring(5,largo3);
                         String ccc="USUARIO: "+line3+"    IP: "+ line4+"   PUERTO: "+line5;
                         System.out.println (ccc);
-                        /*System.out.println (line3);
-                    System.out.println (line4);
-                    System.out.println (line5);*/
-                        //out.write("<h1>"+largo+"</h1>");
                         out.write("<script language=\"javascript\">");
 
 
@@ -291,7 +319,7 @@ private static DataInputStream in;
                     }
                 }
                 //Close the input stream
-                in.close();
+                ina.close();
   
     }catch (Exception e){//Catch exception if any
   System.err.println("Error: " + e.getMessage());

@@ -42,6 +42,7 @@ public class TareaRedes extends Thread {
         out.write("Content-Type: text/html; charset=UTF-8\r\n");
         out.write("Connection: close\r\n");
         out.write("\r\n");
+        
         out.write("<body>");
         out.write("<div style=\"float:right\">");
         out.write("<div>");
