@@ -84,11 +84,12 @@ public class TareaRedes extends Thread {
         out.write("{");
         out.write("var TerminalType = document.getElementById(\"select1\").value;");
         out.write("document.getElementById(\"deta\").innerHTML=TerminalType;");
-         out.write("<body>");
+ 
 
         
         out.write("}");
         out.write("</script>");
+        out.write("<body>");
         in = new DataInputStream(clientSocket.getInputStream());
         
         String inputRequest;
