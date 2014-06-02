@@ -1,4 +1,3 @@
-
-ca�ete: pfeffer
-SERVER: OK
-SERVER: ERROR: Fallo el envio de el mensaje
+pruebamensaje=Send+nico+hola
+mensaje=Send+poto+asereje
+mensaje=Send+poto+asereja
