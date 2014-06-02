@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 package clientechat;
 
@@ -152,7 +148,7 @@ private static DataInputStream in;
         out.write("<body>");
         out.write("<div style=\"float:right\">");
         out.write("<div>");
-            out.write("<textarea rows=\"30\" cols=\"100\" disabled=\"True\"></textarea>");
+            out.write("<textarea id=\"area1\" name=\"area1\" rows=\"30\" cols=\"100\" disabled=\"True\"></textarea>");
         out.write("</div>");
         
         out.write("<form method=\"POST\" name=\"nnn\" action=\"http://localhost:8080\">");
@@ -161,6 +157,10 @@ private static DataInputStream in;
         
         out.write("<input type=\"submit\" value=\"Enviar\" id=\"Enviar\" style=\"visibility: \"/>");
      
+        out.write("</form>");
+        out.write("<form method=\"GET\" name=\"las3\" action=\"http://localhost:8080\">");
+        out.write("<input type=\"submit\" value=\"Actualizar Chat\" id=\"act_chat\" />");
+        out.write("<input type=\"text\" name=\"act_chat\" value=\"asd\" style=\"visibility:hidden \">");
         out.write("</form>");
         out.write("</div>");
         out.write("<h1 id=\"agre_c\" style=\"visibility:\"\"\">Agregar contacto</h1>");
@@ -177,7 +177,7 @@ private static DataInputStream in;
         out.write("<input type=\"submit\" value=\"Guardar Contacto\" id=\"agre\" style=\"visibility: \"/>");
         out.write("</form>");
         
-        out.write("<form method=\"GET\" name=\"las2\">");
+        out.write("<form method=\"GET\" name=\"las2\" action=\"http://localhost:8080\">");
         out.write("<h1>Contactos</h1>");
         out.write("<input type=\"submit\" value=\"Actualizar Contactos\" id=\"mostrar\" />");
         out.write("<input type=\"text\" name=\"get_con\" value=\"asd\" style=\"visibility:hidden \">");
@@ -321,16 +321,82 @@ private static DataInputStream in;
                 //Close the input stream
                 ina.close();
   
-    }catch (Exception e){//Catch exception if any
-  System.err.println("Error: " + e.getMessage());
-  }
-            finally
-            {
-                if(aux != null) {
-                    aux.close();
-                }
-            }
+                }catch (Exception e){//Catch exception if any
+              System.err.println("Error: " + e.getMessage());
+              }
+                        finally
+                        {
+                            if(aux != null) {
+                                aux.close();
+                            }
+                        }
            
+        }
+        else if(line1[1].equals("/?act_chat=asd") && method.equals("GET"))
+        {
+            //hacer actualizar!!!!!!!!
+              System.out.println("metodo: " + method);
+            String[] tokens = inputRequest.split("\n");
+            
+            for (i = 0; i < tokens.length; i++){
+                System.out.println(tokens[i]);
+            }
+            String users=tokens[i-1];
+            BufferedWriter aux = null;
+            try{
+                // Open the file that is the first 
+                // command line parameter
+                FileInputStream fstream = new FileInputStream("mensajes.txt");
+                // Get the object of DataInputStream
+                DataInputStream ina = new DataInputStream(fstream);
+                BufferedReader br = new BufferedReader(new InputStreamReader(ina));
+                String strLine;
+                //Read File Line By Line
+                while ((strLine = br.readLine()) != null)   
+                {
+                // Print the content on the console
+                    //String[] line2 = strLine.split("&");
+                    int largo=strLine.length();
+                    //int largo2=line2[1].length();
+                    //int largo3=line2[2].length();
+                    if(largo!=0)
+                    {
+                        //String line3= line2[0].substring(5,largo);
+                        //String line4= line2[1].substring(3,largo2);
+                        //String line5= line2[2].substring(5,largo3);
+                        //String ccc="USUARIO: "+line3+"    IP: "+ line4+"   PUERTO: "+line5;
+                        System.out.println (strLine);
+                        out.write("<script language=\"javascript\">");
+
+
+
+                        /*out.write(
+    "            var mySel = select1; // Listbox Name\n" +
+    "            var myOption;\n" +
+    "\n" +
+    "            myOption = document.createElement(\"Option\");\n" +
+    "            myOption.text = \""+line3+"\"; //Textbox's value\n            "
+            + "myOption.value =  \""+ ccc+"\"; //Textbox's value\n" +
+    "            mySel.add(myOption);");*/
+                        out.write(
+                        "var aux=\""+strLine+"\";"+
+                        "area1.value+=aux;" 
+                        );
+                        out.write("</script>");
+                    }
+                }
+                //Close the input stream
+                ina.close();
+  
+                }catch (Exception e){//Catch exception if any
+              System.err.println("Error: " + e.getMessage());
+              }
+                        finally
+                        {
+                            if(aux != null) {
+                                aux.close();
+                            }
+                        }  
         }
         System.err.println("Conexion con el cliente terminada");
         out.close();
