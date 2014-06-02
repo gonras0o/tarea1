@@ -21,13 +21,11 @@ import java.net.Socket;
  *
  * @author Tomas
  */
-class ServerHTTP implements Runnable{
+class ServerHTTP implements Runnable {
 private static BufferedWriter out=null;
 private static Socket ServerHttp=null;
 private static ServerSocket SocketHttp=null;
 private static DataInputStream in;
-private static String Mensaje="prueba";
-private static boolean Enviado = true;
     public ServerHTTP(Socket server,ServerSocket serverSocket) throws IOException {
         /* pal servidor */
 //        o = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
@@ -136,9 +134,7 @@ private static boolean Enviado = true;
                     {
                         FileWriter fstream = new FileWriter("mensajes.txt", true); //true tells to append data.
                         aux = new BufferedWriter(fstream);
-//                        Mensaje = users;
-                        Enviado = false;
-                        aux.write(users);
+                        aux.write(users.substring(15,users.length()));
                         aux.newLine();
                     }
                     catch (IOException e)
@@ -266,10 +262,25 @@ private static boolean Enviado = true;
                     //int largo3=line2[2].length();
                     if(largo!=0)
                     {
+                        //String line3= line2[0].substring(5,largo);
+                        //String line4= line2[1].substring(3,largo2);
+                        //String line5= line2[2].substring(5,largo3);
+                        //String ccc="USUARIO: "+line3+"    IP: "+ line4+"   PUERTO: "+line5;
                         System.out.println (strLine);
                         out.write("<script language=\"javascript\">");
+
+
+
+                        /*out.write(
+    "            var mySel = select1; // Listbox Name\n" +
+    "            var myOption;\n" +
+    "\n" +
+    "            myOption = document.createElement(\"Option\");\n" +
+    "            myOption.text = \""+line3+"\"; //Textbox's value\n            "
+            + "myOption.value =  \""+ ccc+"\"; //Textbox's value\n" +
+    "            mySel.add(myOption);");*/
                         out.write(
-                        "var aux=\""+strLine+"\";"+
+                        "var aux=\""+strLine +"\";"+
                         "area1.value+=aux;" 
                         );
                         out.write("</script>");
@@ -298,14 +309,5 @@ private static boolean Enviado = true;
         catch (IOException e) {
             System.err.println(e);
         }
+        }
     }
-//    public String GetMensaje(){
-//        return Mensaje;
-//    }
-//    public boolean GetEnviado(){
-//        return Enviado;
-//    }
-//    public void SetEnviado(boolean Nuevo){
-//        Enviado=Nuevo;
-//    }
-}
