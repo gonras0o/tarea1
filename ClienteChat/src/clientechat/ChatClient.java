@@ -89,16 +89,19 @@ public static void main (String[] args) throws IOException {
     ServerHTTP HTTPserver = new ServerHTTP(clientSocket,serverSocket);
     Thread http = new Thread(HTTPserver);
     http.start();
-    String msg;
+//    String msg;
        
     /* loop leyendo mensajes de stdin y los manda al server */
-    while ((msg = stdIn.readLine()) != null) {
-//        MensajeParaEnviar = HTTPserver.GetMensaje();
-//        if(HTTPserver.GetEnviado()==false){
-//            out.println(MensajeParaEnviar);
-//            HTTPserver.SetEnviado(true);
-//        }
-        out.println(msg);
+//    while ((msg = stdIn.readLine()) != null) {
+    while (true) {
+        MensajeParaEnviar = HTTPserver.GetMensaje();
+        if(HTTPserver.GetEnviado()==false){
+            out.println(MensajeParaEnviar);
+            HTTPserver.SetEnviado();
+            out.flush();
+        }
+        out.flush();
+//        out.println(msg);
     }
   }
 }

@@ -26,6 +26,8 @@ private static BufferedWriter out=null;
 private static Socket ServerHttp=null;
 private static ServerSocket SocketHttp=null;
 private static DataInputStream in;
+private static String Mensaje="test";
+private static boolean Enviado=true;
     public ServerHTTP(Socket server,ServerSocket serverSocket) throws IOException {
         /* pal servidor */
 //        o = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
@@ -134,7 +136,9 @@ private static DataInputStream in;
                     {
                         FileWriter fstream = new FileWriter("mensajes.txt", true); //true tells to append data.
                         aux = new BufferedWriter(fstream);
-                        aux.write(users.substring(15,users.length()));
+                        aux.write(users.substring(8,users.length()));
+                        Mensaje = users.substring(8,users.length());
+                        Enviado=false;
                         aux.newLine();
                     }
                     catch (IOException e)
@@ -309,5 +313,14 @@ private static DataInputStream in;
         catch (IOException e) {
             System.err.println(e);
         }
-        }
     }
+    public String GetMensaje(){
+        return Mensaje;
+    }
+    public boolean GetEnviado(){
+        return Enviado;
+    }
+    public void SetEnviado(){
+        Enviado=true;
+    }
+}

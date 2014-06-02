@@ -1,3 +1,0 @@
-pruebamensaje=Send+nico+hola
-mensaje=Send+poto+asereje
-mensaje=Send+poto+asereja
