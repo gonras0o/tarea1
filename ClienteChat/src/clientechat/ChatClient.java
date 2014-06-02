@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 package clientechat;
 
@@ -233,7 +237,7 @@ private static DataInputStream in;
                     {
                         FileWriter fstream = new FileWriter("mensajes.txt", true); //true tells to append data.
                         aux = new BufferedWriter(fstream);
-                        aux.write(users);
+                        aux.write(users.substring(15,users.length()));
                         aux.newLine();
                     }
                     catch (IOException e)
@@ -379,7 +383,7 @@ private static DataInputStream in;
             + "myOption.value =  \""+ ccc+"\"; //Textbox's value\n" +
     "            mySel.add(myOption);");*/
                         out.write(
-                        "var aux=\""+strLine+"\";"+
+                        "var aux=\""+strLine +"\";"+
                         "area1.value+=aux;" 
                         );
                         out.write("</script>");
