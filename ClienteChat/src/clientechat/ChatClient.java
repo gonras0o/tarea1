@@ -237,7 +237,14 @@ private static DataInputStream in;
                     {
                         FileWriter fstream = new FileWriter("mensajes.txt", true); //true tells to append data.
                         aux = new BufferedWriter(fstream);
-                        aux.write(users.substring(15,users.length()));
+                        String users3=users.substring(8,users.length());
+                        //System.out.println("users3: " + users3);
+                        String[] las = users3.split("\\+");
+                        int w;
+                        for(w=0;w<las.length;w++)
+                        {
+                            aux.write(las[w]+" ");
+                        }
                         aux.newLine();
                     }
                     catch (IOException e)
@@ -258,6 +265,7 @@ private static DataInputStream in;
                     {
                         FileWriter fstream = new FileWriter("clients.txt", true); //true tells to append data.
                         aux = new BufferedWriter(fstream);
+                    
                         aux.write(users);
                         aux.newLine();
                     }
@@ -382,10 +390,13 @@ private static DataInputStream in;
     "            myOption.text = \""+line3+"\"; //Textbox's value\n            "
             + "myOption.value =  \""+ ccc+"\"; //Textbox's value\n" +
     "            mySel.add(myOption);");*/
+                        //String hhh="\n   ";
                         out.write(
-                        "var aux=\""+strLine +"\";"+
+                        "var aux=\""+strLine+"<br>"+"\";"+
                         "area1.value+=aux;" 
                         );
+                 
+                        //out.write("area1.value+='\n'");
                         out.write("</script>");
                     }
                 }

@@ -1,4 +1,5 @@
 
 ca�ete: pfeffer
 SERVER: OK
-SERVER: ERROR: Fallo el envio de el mensaje
+SERVER: ERROR: Fallo el envio de el mensajelmas
+d+mensaje
