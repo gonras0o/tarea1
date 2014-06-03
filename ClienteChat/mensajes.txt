@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 
 ca�ete: pfeffer
 SERVER: OK
 SERVER: ERROR: Fallo el envio de el mensajelmas
 d+mensaje
+=======
+>>>>>>> FETCH_HEAD

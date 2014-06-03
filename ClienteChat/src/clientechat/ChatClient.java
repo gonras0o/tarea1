@@ -26,13 +26,14 @@ import java.net.URI;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ChatClient extends Thread {
+public class ChatClient extends Thread{
 private static int port = 8000; /* el puerto */
 private static String host = "localhost"; /* el evidente host */
 
 private static BufferedReader stdIn;
 private static BufferedWriter out;
 private static String nick;
+private static String MensajeParaEnviar;
 /*
     Lee el nickname y trata de autenticar con el servidor, mandando un commando NICK
     a travez de el buffered writer @out. 
@@ -81,22 +82,31 @@ public static void main (String[] args) throws IOException {
     nick = getNick(in, out);
 
     /* thread que lee mensajes asicronicamente */
-    ServerConn sc = new ServerConn(server);
-    Thread t = new Thread(sc);
-    t.start();
+    ServerConn TCPserver = new ServerConn(server);
+    Thread ConexionServerTCP = new Thread(TCPserver);
+    ConexionServerTCP.start();
     
-    ServerHTTP sh = new ServerHTTP(clientSocket,serverSocket);
-    Thread http = new Thread(sh);
+    ServerHTTP HTTPserver = new ServerHTTP(clientSocket,serverSocket);
+    Thread http = new Thread(HTTPserver);
     http.start();
-    String msg;
+//    String msg;
        
     /* loop leyendo mensajes de stdin y los manda al server */
-    while ((msg = stdIn.readLine()) != null) {
-        out.println(msg);
+//    while ((msg = stdIn.readLine()) != null) {
+    while (true) {
+        MensajeParaEnviar = HTTPserver.GetMensaje();
+        if(HTTPserver.GetEnviado()==false){
+            out.println(MensajeParaEnviar);
+            HTTPserver.SetEnviado();
+            out.flush();
+        }
+        out.flush();
+//        out.println(msg);
     }
   }
 }
 
+<<<<<<< HEAD
 class ServerConn implements Runnable {
 private BufferedReader in = null;
 
@@ -425,3 +435,5 @@ private static DataInputStream in;
         }
         }
     }
+=======
+>>>>>>> FETCH_HEAD
