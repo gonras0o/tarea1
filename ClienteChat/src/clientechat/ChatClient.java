@@ -26,14 +26,13 @@ import java.net.URI;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ChatClient extends Thread{
+public class ChatClient extends Thread {
 private static int port = 8000; /* el puerto */
 private static String host = "localhost"; /* el evidente host */
 
 private static BufferedReader stdIn;
 private static BufferedWriter out;
 private static String nick;
-private static String MensajeParaEnviar;
 /*
     Lee el nickname y trata de autenticar con el servidor, mandando un commando NICK
     a travez de el buffered writer @out. 
@@ -61,6 +60,7 @@ public static void main (String[] args) throws IOException {
             try{
                 if(Desktop.isDesktopSupported()){
                       Desktop.getDesktop().browse(new URI("http://localhost:8080"));
+                      
                 }}
                 catch(Exception e){
                 }   
@@ -69,7 +69,9 @@ public static void main (String[] args) throws IOException {
         System.err.println(e);
         System.exit(1);
     }
-
+    ServerHTTP HTTPserver = new ServerHTTP(clientSocket,serverSocket);
+    Thread http = new Thread(HTTPserver);
+    http.start();
     stdIn = new BufferedReader(new InputStreamReader(System.in));
 
     PrintWriter out = new PrintWriter(server.getOutputStream(), true);
@@ -82,26 +84,23 @@ public static void main (String[] args) throws IOException {
     nick = getNick(in, out);
 
     /* thread que lee mensajes asicronicamente */
-    ServerConn TCPserver = new ServerConn(server);
-    Thread ConexionServerTCP = new Thread(TCPserver);
-    ConexionServerTCP.start();
+    ServerConn ServerConn = new ServerConn(server);
+    Thread tcp = new Thread(ServerConn);
+    tcp.start();
     
-    ServerHTTP HTTPserver = new ServerHTTP(clientSocket,serverSocket);
-    Thread http = new Thread(HTTPserver);
-    http.start();
-//    String msg;
+    String msg;
        
     /* loop leyendo mensajes de stdin y los manda al server */
 //    while ((msg = stdIn.readLine()) != null) {
-    while (true) {
-        MensajeParaEnviar = HTTPserver.GetMensaje();
+//        out.println(msg);
+//    }
+    while(true){
         if(HTTPserver.GetEnviado()==false){
-            out.println(MensajeParaEnviar);
+            out.println(HTTPserver.GetMensaje());
             HTTPserver.SetEnviado();
             out.flush();
         }
         out.flush();
-//        out.println(msg);
     }
   }
 }

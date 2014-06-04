@@ -1,0 +1,11 @@
+Send pepe hola 
+Send nico hola 
+
+nico: hola 
+SERVER: OKSend nico por fin funciona esto 
+
+nico: por fin funciona esto 
+SERVER: OKSend hola holiwawi 
+
+hola: holiwawi 
+SERVER: OK
