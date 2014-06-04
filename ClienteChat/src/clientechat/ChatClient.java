@@ -60,6 +60,7 @@ public static void main (String[] args) throws IOException {
             try{
                 if(Desktop.isDesktopSupported()){
                       Desktop.getDesktop().browse(new URI("http://localhost:8080"));
+                      
                 }}
                 catch(Exception e){
                 }   
@@ -68,7 +69,9 @@ public static void main (String[] args) throws IOException {
         System.err.println(e);
         System.exit(1);
     }
-
+    ServerHTTP HTTPserver = new ServerHTTP(clientSocket,serverSocket);
+    Thread http = new Thread(HTTPserver);
+    http.start();
     stdIn = new BufferedReader(new InputStreamReader(System.in));
 
     PrintWriter out = new PrintWriter(server.getOutputStream(), true);
@@ -81,6 +84,25 @@ public static void main (String[] args) throws IOException {
     nick = getNick(in, out);
 
     /* thread que lee mensajes asicronicamente */
+<<<<<<< HEAD
+    ServerConn ServerConn = new ServerConn(server);
+    Thread tcp = new Thread(ServerConn);
+    tcp.start();
+    
+    String msg;
+       
+    /* loop leyendo mensajes de stdin y los manda al server */
+//    while ((msg = stdIn.readLine()) != null) {
+//        out.println(msg);
+//    }
+    while(true){
+        if(HTTPserver.GetEnviado()==false){
+            out.println(HTTPserver.GetMensaje());
+            HTTPserver.SetEnviado();
+            out.flush();
+        }
+        out.flush();
+=======
     ServerConn sc = new ServerConn(server);
     Thread t = new Thread(sc);
     t.start();
@@ -93,6 +115,7 @@ public static void main (String[] args) throws IOException {
     /* loop leyendo mensajes de stdin y los manda al server */
     while ((msg = stdIn.readLine()) != null) {
         out.println(msg);
+>>>>>>> 42ed91e790ab74e51ec65492d59c74a4cf885235
     }
   }
 }
