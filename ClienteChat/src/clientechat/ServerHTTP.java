@@ -26,9 +26,8 @@ private static BufferedWriter out=null;
 private static Socket ServerHttp=null;
 private static ServerSocket SocketHttp=null;
 private static DataInputStream in;
-private static StringBuilder stringBuilder;
-private static String Mensaje = "prueba";
-private static boolean Enviado = true;
+private static String Mensaje="test";
+private static boolean Enviado=true;
     public ServerHTTP(Socket server,ServerSocket serverSocket) throws IOException {
         /* pal servidor */
 //        o = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
@@ -137,19 +136,10 @@ private static boolean Enviado = true;
                     {
                         FileWriter fstream = new FileWriter("mensajes.txt", true); //true tells to append data.
                         aux = new BufferedWriter(fstream);
-                        String users3=users.substring(8,users.length());
-                        //System.out.println("users3: " + users3);
-                        String[] las = users3.split("\\+");
-                        stringBuilder = new StringBuilder();
-                        int w;
-                        for(w=0;w<las.length;w++)
-                        {
-                            aux.write(las[w]+" ");
-                            stringBuilder.append(las[w]+" ");
-                        }
-                        aux.newLine();
-                        SetMensaje(stringBuilder.toString());
+                        aux.write(users.substring(8,users.length()));
+                        Mensaje = users.substring(8,users.length());
                         Enviado=false;
+                        aux.newLine();
                     }
                     catch (IOException e)
                     {
@@ -169,7 +159,6 @@ private static boolean Enviado = true;
                     {
                         FileWriter fstream = new FileWriter("clients.txt", true); //true tells to append data.
                         aux = new BufferedWriter(fstream);
-                    
                         aux.write(users);
                         aux.newLine();
                     }
@@ -294,13 +283,10 @@ private static boolean Enviado = true;
     "            myOption.text = \""+line3+"\"; //Textbox's value\n            "
             + "myOption.value =  \""+ ccc+"\"; //Textbox's value\n" +
     "            mySel.add(myOption);");*/
-                        //String hhh="\n   ";
                         out.write(
-                        "var aux=\""+strLine+"<br>"+"\";"+
+                        "var aux=\""+strLine +"\";"+
                         "area1.value+=aux;" 
                         );
-                 
-                        //out.write("area1.value+='\n'");
                         out.write("</script>");
                     }
                 }
@@ -336,8 +322,5 @@ private static boolean Enviado = true;
     }
     public void SetEnviado(){
         Enviado=true;
-    }
-    public void SetMensaje(String nuevo){
-        Mensaje=nuevo;
     }
 }

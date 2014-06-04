@@ -1,11 +1,8 @@
-Send pepe hola 
-Send nico hola 
+<<<<<<< HEAD
 
-nico: hola 
-SERVER: OKSend nico por fin funciona esto 
-
-nico: por fin funciona esto 
-SERVER: OKSend hola holiwawi 
-
-hola: holiwawi 
+ca�ete: pfeffer
 SERVER: OK
+SERVER: ERROR: Fallo el envio de el mensajelmas
+d+mensaje
+=======
+>>>>>>> FETCH_HEAD
