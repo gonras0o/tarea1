@@ -26,8 +26,9 @@ private static BufferedWriter out=null;
 private static Socket ServerHttp=null;
 private static ServerSocket SocketHttp=null;
 private static DataInputStream in;
-private static String Mensaje="test";
-private static boolean Enviado=true;
+private static StringBuilder stringBuilder;
+private static String Mensaje = "prueba";
+private static boolean Enviado = true;
     public ServerHTTP(Socket server,ServerSocket serverSocket) throws IOException {
         /* pal servidor */
 //        o = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
@@ -51,9 +52,18 @@ private static boolean Enviado=true;
         out.write("<body>");
         out.write("<div style=\"float:right\">");
         out.write("<div>");
-            out.write("<textarea id=\"area1\" name=\"area1\" rows=\"30\" cols=\"100\" disabled=\"True\"></textarea>");
+        out.write("<textarea id=\"area1\" name=\"area1\" rows=\"30\" cols=\"100\" disabled=\"True\"></textarea>");
         out.write("</div>");
+        out.write("<div id=\"myTable\" style=\"visibility:hidden\">");
+        out.write("<form method=\"POST\" id=\"nick2\" name=\"nick2\" action=\"http://localhost:8080\" style=\"visibility:visible\">");
+      
+        out.write("<input type=\"text\" id=\"nick\" name=\"nick\" style=\"visibility:visible width:100px;\"/>");
         
+        out.write("<input type=\"submit\" value=\"Logear\" id=\"logear\" style=\"visibility: \"/>");
+     
+        out.write("</form>");
+        out.write("</div>");
+        out.write("<div>");
         out.write("<form method=\"POST\" name=\"nnn\" action=\"http://localhost:8080\">");
       
         out.write("<input type=\"text\" id=\"mensaje\" name=\"mensaje\" style=\"width:700px;\"/>");
@@ -61,6 +71,7 @@ private static boolean Enviado=true;
         out.write("<input type=\"submit\" value=\"Enviar\" id=\"Enviar\" style=\"visibility: \"/>");
      
         out.write("</form>");
+        out.write("</div>");
         out.write("<form method=\"GET\" name=\"las3\" action=\"http://localhost:8080\">");
         out.write("<input type=\"submit\" value=\"Actualizar Chat\" id=\"act_chat\" />");
         out.write("<input type=\"text\" name=\"act_chat\" value=\"asd\" style=\"visibility:hidden \">");
@@ -129,6 +140,7 @@ private static boolean Enviado=true;
                 }
                 String users=tokens[i-1];
                 String users2= users.substring(0,7);
+                String users4= users.substring(0,4);
                 if(users2.equals("mensaje"))
                 {
                     BufferedWriter aux = null;
@@ -136,10 +148,19 @@ private static boolean Enviado=true;
                     {
                         FileWriter fstream = new FileWriter("mensajes.txt", true); //true tells to append data.
                         aux = new BufferedWriter(fstream);
-                        aux.write(users.substring(8,users.length()));
-                        Mensaje = users.substring(8,users.length());
-                        Enviado=false;
+                        String users3=users.substring(8,users.length());
+                        //System.out.println("users3: " + users3);
+                        String[] las = users3.split("\\+");
+                        stringBuilder = new StringBuilder();
+                        int w;
+                        for(w=0;w<las.length;w++)
+                        {
+                            aux.write(las[w]+" ");
+                            stringBuilder.append(las[w]+" ");
+                        }
                         aux.newLine();
+                        SetMensaje(stringBuilder.toString());
+                        Enviado=false;
                     }
                     catch (IOException e)
                     {
@@ -152,6 +173,19 @@ private static boolean Enviado=true;
                         }
                     }
                 }
+                else if(users4.equals("nick"))
+                {
+                    //aca guardo el nick en la variable nick
+                    String nick=users.substring(5,users.length());
+                    System.out.println(nick);
+                    out.write("<script language=\"javascript\">");
+                    out.write("{");
+         out.write("document.getElementById('nick2').style.visibility= \"hidden\" ;");
+        
+        out.write("}");
+        out.write("</script>");
+      
+                }
                 else
                 {
                     BufferedWriter aux = null;
@@ -159,6 +193,7 @@ private static boolean Enviado=true;
                     {
                         FileWriter fstream = new FileWriter("clients.txt", true); //true tells to append data.
                         aux = new BufferedWriter(fstream);
+                    
                         aux.write(users);
                         aux.newLine();
                     }
@@ -283,10 +318,13 @@ private static boolean Enviado=true;
     "            myOption.text = \""+line3+"\"; //Textbox's value\n            "
             + "myOption.value =  \""+ ccc+"\"; //Textbox's value\n" +
     "            mySel.add(myOption);");*/
+                        //String hhh="\n   ";
                         out.write(
-                        "var aux=\""+strLine +"\";"+
+                        "var aux=\""+strLine+"\";"+
                         "area1.value+=aux;" 
                         );
+                 
+                        //out.write("area1.value+='\n'");
                         out.write("</script>");
                     }
                 }
@@ -322,5 +360,8 @@ private static boolean Enviado=true;
     }
     public void SetEnviado(){
         Enviado=true;
+    }
+    public void SetMensaje(String nuevo){
+        Mensaje=nuevo;
     }
 }
