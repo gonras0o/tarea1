@@ -320,7 +320,11 @@ private static boolean Enviado = true;
     "            mySel.add(myOption);");*/
                         //String hhh="\n   ";
                         out.write(
+<<<<<<< HEAD
                         "var aux=\""+strLine+"\";"+
+=======
+                        "var aux=\""+strLine+"<br>"+"\";"+
+>>>>>>> FETCH_HEAD
                         "area1.value+=aux;" 
                         );
                  
