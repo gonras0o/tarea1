@@ -33,24 +33,29 @@ private static String host = "localhost"; /* el evidente host */
 private static BufferedReader stdIn;
 private static BufferedWriter out;
 private static String nick;
+private static String Nick;
 /*
     Lee el nickname y trata de autenticar con el servidor, mandando un commando NICK
     a travez de el buffered writer @out. 
     si la respuesta del bufferedreader @in no es ok queda la embarrada
  */
-private static String getNick(BufferedReader in,PrintWriter out) throws IOException {
+private static String getNick(BufferedReader in,PrintWriter out,String Nick) throws IOException {
     System.out.print("Introdusca su nick: ");
-    String msg = stdIn.readLine();
+//    String msg = stdIn.readLine();
+    String msg=Nick;
+    System.out.println(msg);
     out.println("NICK " + msg);
+    out.flush();
     String serverResponse = in.readLine();
     if ("SERVER: OK".equals(serverResponse)) return msg;
     System.out.println(serverResponse);
-    return getNick(in, out);
+    
+    return getNick(in, out,Nick);
 }
 
 public static void main (String[] args) throws IOException {
 
-    ServerSocket serverSocket = new ServerSocket(8080);
+    ServerSocket serverSocket = new ServerSocket(8079);
     Socket server = null;
     Socket clientSocket= null;
 //    int pert = 8080;
@@ -59,7 +64,7 @@ public static void main (String[] args) throws IOException {
 //        clientSocket = serverSocket.accept();
             try{
                 if(Desktop.isDesktopSupported()){
-                      Desktop.getDesktop().browse(new URI("http://localhost:8080"));
+                      Desktop.getDesktop().browse(new URI("http://localhost:8079"));
                       
                 }}
                 catch(Exception e){
@@ -75,13 +80,21 @@ public static void main (String[] args) throws IOException {
     stdIn = new BufferedReader(new InputStreamReader(System.in));
 
     PrintWriter out = new PrintWriter(server.getOutputStream(), true);
+    out.flush();
     /* Obtiene el output eh input reader */
     BufferedReader in = new BufferedReader(new InputStreamReader(
                 server.getInputStream()));
-    
-    
+    boolean TieneNick = false;
+    Nick=null;
+    while(TieneNick==false){
+        if(HTTPserver.GetHayNick()==true){
+            Nick=HTTPserver.GetNick(); 
+            TieneNick=true;
+        }
         
-    nick = getNick(in, out);
+    }
+        
+    nick = getNick(in, out,Nick);
 
     /* thread que lee mensajes asicronicamente */
     ServerConn ServerConn = new ServerConn(server);

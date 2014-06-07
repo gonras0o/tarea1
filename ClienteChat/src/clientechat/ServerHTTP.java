@@ -29,6 +29,8 @@ private static DataInputStream in;
 private static StringBuilder stringBuilder;
 private static String Mensaje = "prueba";
 private static boolean Enviado = true;
+private static String Nick="prueba";
+private static boolean HayNick = false;
     public ServerHTTP(Socket server,ServerSocket serverSocket) throws IOException {
         /* pal servidor */
 //        o = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
@@ -52,10 +54,7 @@ private static boolean Enviado = true;
         out.write("<body>");
         out.write("<div style=\"float:right\">");
         out.write("<div>");
-        out.write("<textarea id=\"area1\" name=\"area1\" rows=\"30\" cols=\"100\" disabled=\"True\"></textarea>");
-        out.write("</div>");
-        out.write("<div id=\"myTable\" style=\"visibility:hidden\">");
-        out.write("<form method=\"POST\" id=\"nick2\" name=\"nick2\" action=\"http://localhost:8080\" style=\"visibility:visible\">");
+        out.write("<form method=\"POST\" id=\"nick2\" name=\"nick2\"  style=\"visibility:visible\">");
       
         out.write("<input type=\"text\" id=\"nick\" name=\"nick\" style=\"visibility:visible width:100px;\"/>");
         
@@ -64,7 +63,11 @@ private static boolean Enviado = true;
         out.write("</form>");
         out.write("</div>");
         out.write("<div>");
-        out.write("<form method=\"POST\" name=\"nnn\" action=\"http://localhost:8080\">");
+        out.write("<textarea id=\"area1\" name=\"area1\" rows=\"30\" cols=\"100\" disabled=\"True\" style=\"visibility:hidden\"></textarea>");
+        out.write("</div>");
+
+        out.write("<div>");
+        out.write("<form method=\"POST\" id=\"nnn\" name=\"nnn\" style=\"visibility:hidden\">");
       
         out.write("<input type=\"text\" id=\"mensaje\" name=\"mensaje\" style=\"width:700px;\"/>");
         
@@ -72,7 +75,7 @@ private static boolean Enviado = true;
      
         out.write("</form>");
         out.write("</div>");
-        out.write("<form method=\"GET\" name=\"las3\" action=\"http://localhost:8080\">");
+        out.write("<form method=\"GET\" id=\"las3\" name=\"las3\"  style=\"visibility:hidden\">");
         out.write("<input type=\"submit\" value=\"Actualizar Chat\" id=\"act_chat\" />");
         out.write("<input type=\"text\" name=\"act_chat\" value=\"asd\" style=\"visibility:hidden \">");
         out.write("</form>");
@@ -91,7 +94,7 @@ private static boolean Enviado = true;
         out.write("<input type=\"submit\" value=\"Guardar Contacto\" id=\"agre\" style=\"visibility: \"/>");
         out.write("</form>");
         
-        out.write("<form method=\"GET\" name=\"las2\" action=\"http://localhost:8080\">");
+        out.write("<form method=\"GET\" name=\"las2\" >");
         out.write("<h1>Contactos</h1>");
         out.write("<input type=\"submit\" value=\"Actualizar Contactos\" id=\"mostrar\" />");
         out.write("<input type=\"text\" name=\"get_con\" value=\"asd\" style=\"visibility:hidden \">");
@@ -143,6 +146,14 @@ private static boolean Enviado = true;
                 String users4= users.substring(0,4);
                 if(users2.equals("mensaje"))
                 {
+                    out.write("<script language=\"javascript\">");
+                    out.write("{");
+                    out.write("document.getElementById('nick2').style.visibility= \"hidden\" ;");
+                    out.write("document.getElementById('nnn').style.visibility= \"visible\" ;");
+                    out.write("document.getElementById('area1').style.visibility= \"visible\" ;");
+                    out.write("document.getElementById('las3').style.visibility= \"visible\" ;");
+                    out.write("}");
+                    out.write("</script>");
                     BufferedWriter aux = null;
                     try  
                     {
@@ -176,18 +187,29 @@ private static boolean Enviado = true;
                 else if(users4.equals("nick"))
                 {
                     //aca guardo el nick en la variable nick
-                    String nick=users.substring(5,users.length());
-                    System.out.println(nick);
+                    Nick=users.substring(5,users.length());
+                    HayNick=true;
+                    System.out.println(Nick);
                     out.write("<script language=\"javascript\">");
                     out.write("{");
-         out.write("document.getElementById('nick2').style.visibility= \"hidden\" ;");
-        
-        out.write("}");
-        out.write("</script>");
+                    out.write("document.getElementById('nick2').style.visibility= \"hidden\" ;");
+                    out.write("document.getElementById('nnn').style.visibility= \"visible\" ;");
+                    out.write("document.getElementById('area1').style.visibility= \"visible\" ;");
+                    out.write("document.getElementById('las3').style.visibility= \"visible\" ;");
+                    out.write("}");
+                    out.write("</script>");
       
                 }
                 else
                 {
+                    out.write("<script language=\"javascript\">");
+                    out.write("{");
+                    out.write("document.getElementById('nick2').style.visibility= \"hidden\" ;");
+                    out.write("document.getElementById('nnn').style.visibility= \"visible\" ;");
+                    out.write("document.getElementById('area1').style.visibility= \"visible\" ;");
+                    out.write("document.getElementById('las3').style.visibility= \"visible\" ;");
+                    out.write("}");
+                    out.write("</script>");
                     BufferedWriter aux = null;
                     try  
                     {
@@ -211,6 +233,14 @@ private static boolean Enviado = true;
             
         }
         else if(line1[1].equals("/?get_con=asd") && method.equals("GET")){
+            out.write("<script language=\"javascript\">");
+                    out.write("{");
+                    out.write("document.getElementById('nick2').style.visibility= \"hidden\" ;");
+                    out.write("document.getElementById('nnn').style.visibility= \"visible\" ;");
+                    out.write("document.getElementById('area1').style.visibility= \"visible\" ;");
+                    out.write("document.getElementById('las3').style.visibility= \"visible\" ;");
+                    out.write("}");
+                    out.write("</script>");
             System.out.println("metodo: " + method);
             String[] tokens = inputRequest.split("\n");
             
@@ -274,6 +304,14 @@ private static boolean Enviado = true;
         }
         else if(line1[1].equals("/?act_chat=asd") && method.equals("GET"))
         {
+            out.write("<script language=\"javascript\">");
+                    out.write("{");
+                    out.write("document.getElementById('nick2').style.visibility= \"hidden\" ;");
+                    out.write("document.getElementById('nnn').style.visibility= \"visible\" ;");
+                    out.write("document.getElementById('area1').style.visibility= \"visible\" ;");
+                    out.write("document.getElementById('las3').style.visibility= \"visible\" ;");
+                    out.write("}");
+                    out.write("</script>");
             //hacer actualizar!!!!!!!!
               System.out.println("metodo: " + method);
             String[] tokens = inputRequest.split("\n");
@@ -320,11 +358,7 @@ private static boolean Enviado = true;
     "            mySel.add(myOption);");*/
                         //String hhh="\n   ";
                         out.write(
-<<<<<<< HEAD
                         "var aux=\""+strLine+"\";"+
-=======
-                        "var aux=\""+strLine+"<br>"+"\";"+
->>>>>>> FETCH_HEAD
                         "area1.value+=aux;" 
                         );
                  
@@ -367,5 +401,11 @@ private static boolean Enviado = true;
     }
     public void SetMensaje(String nuevo){
         Mensaje=nuevo;
+    }
+    public String GetNick(){
+        return Nick;
+    }
+    public boolean GetHayNick(){
+        return HayNick;
     }
 }
